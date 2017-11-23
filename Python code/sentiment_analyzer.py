@@ -1,6 +1,8 @@
 class sentiment:
     def get(self,list_of_tweets):
-        positivity = []
+        positive = []
+        neutral = []
+        negative = []
         import requests
         for tweet in list_of_tweets:
             data = [
@@ -8,5 +10,10 @@ class sentiment:
             ]
             response = requests.post('http://text-processing.com/api/sentiment/', data=data)
             data = response.json()
-            positivity.append(data["probability"]["pos"])
-        return positivity
+            positive.append(data["probability"]["pos"])
+            neutral.append(data["probability"]["neutral"])
+            negative.append(data["probability"]["neg"])
+            mean_positive = sum(positive)/len(positive)
+            mean_neutral = sum(neutral)/len(neutral)
+            mean_negative = sum(negative)/len(negative)
+        return (mean_positive, mean_neutral, mean_negative)

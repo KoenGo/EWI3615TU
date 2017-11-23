@@ -4,6 +4,7 @@ number_of_tweets = input("How many tweets?")
 list_of_tweets = tweets().get(search_text, number_of_tweets)
 
 from sentiment_analyzer import sentiment
-positivity = sentiment().get(list_of_tweets)
-mean_positivity = sum(positivity)/len(positivity)
-print(mean_positivity)
+(mean_positive, mean_neutral, mean_negative) = sentiment().get(list_of_tweets)
+print("positive = " + str(mean_positive))
+print("neutral = " + str(mean_neutral))
+print("negative = " + str(mean_negative))
