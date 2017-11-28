@@ -4,7 +4,6 @@ class tweets:
         client_secret = 'CbsDAod2sb31pLqVzBctFdoNMsTQPUZTm1ZInaXm62gmDP7J7I'
 
         import base64
-
         key_secret = '{}:{}'.format(client_key, client_secret).encode('ascii')
         b64_encoded_key = base64.b64encode(key_secret)
         b64_encoded_key = b64_encoded_key.decode('ascii')
@@ -24,7 +23,6 @@ class tweets:
         }
 
         auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
-
         access_token = auth_resp.json()['access_token']
 
         search_headers = {
@@ -42,11 +40,11 @@ class tweets:
 
         search_resp = requests.get(search_url, headers=search_headers, params=search_params)
         tweet_data = search_resp.json()
-        list_of_tweets = []
+        string_of_tweets = ""
         for x in tweet_data['statuses']:
             try:
-                list_of_tweets.append(x['retweeted_status']['full_text'] + '\n')
+                string_of_tweets += x['retweeted_status']['full_text']
             except KeyError:
-                list_of_tweets.append(x['full_text'] + '\n')
-        return list_of_tweets
+                string_of_tweets += x['full_text']
+        return string_of_tweets
 
