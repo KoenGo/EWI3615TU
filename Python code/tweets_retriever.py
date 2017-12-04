@@ -22,8 +22,14 @@ class tweets:
             'grant_type': 'client_credentials'
         }
 
-        auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
-        access_token = auth_resp.json()['access_token']
+        import sys
+
+        try:
+            auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
+            access_token = auth_resp.json()['access_token']
+        except:
+            sys.exit("Error: Authentication failed")
+
 
         search_headers = {
             'Authorization': 'Bearer {}'.format(access_token)
@@ -37,14 +43,21 @@ class tweets:
         }
 
         search_url = '{}1.1/search/tweets.json?tweet_mode=extended'.format(base_url)
-
-        search_resp = requests.get(search_url, headers=search_headers, params=search_params)
+        try:
+            search_resp = requests.get(search_url, headers=search_headers, params=search_params)
+        except:
+            print("Error in retrieving tweets from twitter API")
         tweet_data = search_resp.json()
-        string_of_tweets = ""
+        list_of_tweets = []
+        import re
         for x in tweet_data['statuses']:
             try:
-                string_of_tweets += x['retweeted_status']['full_text']
+                tweet = x['retweeted_status']['full_text']
+                tweet.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+                list_of_tweets.append(tweet)
             except KeyError:
-                string_of_tweets += x['full_text']
-        return string_of_tweets
+                tweet = x['full_text']
+                tweet.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+                list_of_tweets.append(tweet)
+        return list_of_tweets
 
