@@ -1,14 +1,16 @@
 class tweets:
     def get(self, search_text, number_of_tweets):
+        import base64
+        import requests
+        import sys
+        import re
+
         client_key = 'U0zHy6gQlsMpQumbEgHWXb7nm'
         client_secret = 'CbsDAod2sb31pLqVzBctFdoNMsTQPUZTm1ZInaXm62gmDP7J7I'
 
-        import base64
         key_secret = '{}:{}'.format(client_key, client_secret).encode('ascii')
         b64_encoded_key = base64.b64encode(key_secret)
         b64_encoded_key = b64_encoded_key.decode('ascii')
-
-        import requests
 
         base_url = 'https://api.twitter.com/'
         auth_url = '{}oauth2/token'.format(base_url)
@@ -21,8 +23,6 @@ class tweets:
         auth_data = {
             'grant_type': 'client_credentials'
         }
-
-        import sys
 
         try:
             auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
@@ -49,7 +49,6 @@ class tweets:
             print("Error in retrieving tweets from twitter API")
         tweet_data = search_resp.json()
         list_of_tweets = []
-        import re
         for x in tweet_data['statuses']:
             try:
                 tweet = x['retweeted_status']['full_text']
