@@ -18,7 +18,7 @@ class tweets:
         api = tweepy.API(auth)
 
 
-        tweet_data = api.search(q=search_text, count=number_of_tweets,geocode="39.8,-95.583068847656,2500km")
+        tweet_data = api.search(q=search_text, count=number_of_tweets, tweet_mode='extended', geocode="39.8,-95.583068847656,2500km")
         list_of_tweets = []
         list_of_coordinates = []
         count = 0
@@ -28,11 +28,9 @@ class tweets:
                 tweet = x.full_text
                 tweet.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
                 list_of_tweets.append(tweet)
+                print(x.coordinates)
             except AttributeError:
-                tweet = x.text
-                tweet.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
-                list_of_tweets.append(tweet)
-                print(x)
+                pass
         print(list_of_tweets)
         print(count)
         return list_of_tweets
