@@ -12,25 +12,38 @@ import datetime
 from collections import Counter as counter
 import operator
 
+
 class Newspage():
     def __init__(self):
         self.url = "http://edition.cnn.com/specials/last-50-stories"
         self.source = requests.get(self.url).text
         self.timestamp = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+        self.filename = 'newspage.txt'
 
         # Write whole source code to txt file
-        f = open('newspage.txt', 'w')
-        f.write(self.source)
-        f.close()
+        with open(self.filename, 'w') as file:
+            file.write(self.source)
+            file.close()
 
     def __str__(self):
         top_five = [i for i in self.most_common_nouns(5)]
         return "News page created at: " + str(self.timestamp) + "\nWith top five: " + str(top_five)
 
+    # FIXME
+
+    def find_more(self):
+        with open(self.filename, "a") as file:
+            file.write(self.source)
+        unique_headlines = set(self.get_headlines(self.filename))
+        if self.get_headlines(self.filename) == unique_headlines:
+            return "No new head lines found"
+        else:
+            return unique_headlines
+
     # Get headlines from the source code
 
-    def get_headlines(self, file):
-        newspage = open(file, 'rt').read()
+    def get_headlines(self, filename):
+        newspage = open(filename, 'rt').read()
         headlines = re.findall('(?<=<span class="cd__headline-text">)([^<]*)', newspage)
         return headlines
 
@@ -53,7 +66,7 @@ class Newspage():
 
     def extract_all(self):
         result = []
-        for headline in self.get_headlines('newspage.txt'):
+        for headline in self.get_headlines(self.filename):
             result.append(self.extract_nouns(headline))
         return result
 
@@ -69,3 +82,7 @@ class Newspage():
             return sorted_nouns[:amount]
         else:
             return sorted_nouns
+
+
+newspage = Newspage()
+print(newspage.find_more())
