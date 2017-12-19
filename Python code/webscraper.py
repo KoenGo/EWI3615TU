@@ -36,8 +36,9 @@ class Newspage():
 
     def find_more(self):
         self.old_headlines = self.current_headlines
-        with open(self.filename, "a") as file:
+        with open(self.filename, "w") as file:
             file.write(self.source)
+            file.close()
         self.current_headlines = self.get_headlines(self.filename)
         if set(self.current_headlines) == set(self.old_headlines):
             return "No new headlines found"
@@ -79,8 +80,10 @@ class Newspage():
         all_nouns = []
         for noun_list in self.extract_all():
             all_nouns += noun_list
-
+        # Remove CNN and 's from the list
         noun_dict = Counter(all_nouns)
+        del noun_dict["'s"]
+        del noun_dict["cnn"]
         sorted_nouns = sorted(noun_dict.items(), key=operator.itemgetter(1), reverse=True)
         if int(amount) > 0:
             return sorted_nouns[:amount]
@@ -97,6 +100,6 @@ while True:
     elif inp.lower() == "n":
         print(newspage.find_more())
     elif inp.lower() == "show":
-        print(newspage.top_five)
+        print(newspage)
     else:
         continue
