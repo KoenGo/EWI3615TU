@@ -9,7 +9,8 @@ import requests
 import re
 from textblob import TextBlob
 import datetime
-from collections import Counter as counter
+import time
+from collections import Counter
 import operator
 
 
@@ -24,23 +25,26 @@ class Newspage():
         with open(self.filename, 'w') as file:
             file.write(self.source)
             file.close()
+        self.current_headlines = self.get_headlines(self.filename)
+        self.old_headlines = None
+        self.top_five = [i for i in self.most_common_nouns(5)]
 
     def __str__(self):
-        top_five = [i for i in self.most_common_nouns(5)]
-        return "News page created at: " + str(self.timestamp) + "\nWith top five: " + str(top_five)
+        return "News page created at: " + str(self.timestamp) + "\nWith top five: " + str(self.top_five)
 
-    # FIXME
+    #  Pull more headlines from the website
 
     def find_more(self):
+        self.old_headlines = self.current_headlines
         with open(self.filename, "a") as file:
             file.write(self.source)
-        unique_headlines = set(self.get_headlines(self.filename))
-        if self.get_headlines(self.filename) == unique_headlines:
-            return "No new head lines found"
+        self.current_headlines = self.get_headlines(self.filename)
+        if set(self.current_headlines) == set(self.old_headlines):
+            return "No new headlines found"
         else:
-            return unique_headlines
+            return list(set(self.current_headlines).difference(self.old_headlines))
 
-    # Get headlines from the source code
+    # Get headlines from the source code (which is in the text file)
 
     def get_headlines(self, filename):
         newspage = open(filename, 'rt').read()
@@ -76,7 +80,7 @@ class Newspage():
         for noun_list in self.extract_all():
             all_nouns += noun_list
 
-        noun_dict = counter(all_nouns)
+        noun_dict = Counter(all_nouns)
         sorted_nouns = sorted(noun_dict.items(), key=operator.itemgetter(1), reverse=True)
         if int(amount) > 0:
             return sorted_nouns[:amount]
@@ -85,4 +89,14 @@ class Newspage():
 
 
 newspage = Newspage()
-print(newspage.find_more())
+
+while True:
+    inp = input("\nInput 'n' to pull more headlines, 's' to stop: ")
+    if inp.lower() == "s":
+        break
+    elif inp.lower() == "n":
+        print(newspage.find_more())
+    elif inp.lower() == "show":
+        print(newspage.top_five)
+    else:
+        continue
