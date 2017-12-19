@@ -94,6 +94,7 @@ class Newspage():
 newspage = Newspage()
 
 while True:
+    time.sleep(0.1)
     inp = input("\nInput 'n' to pull more headlines, 's' to stop: ")
     if inp.lower() == "s":
         break
