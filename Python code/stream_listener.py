@@ -1,14 +1,17 @@
 import json
+import sys
 from tweepy.streaming import StreamListener
 count = 0
-data_list = []
 class listener(StreamListener):
+    def __init__(self, number_of_tweets, data_list):
+        self.number_of_tweets = number_of_tweets
+        self.data_list = data_list
+
     def on_data(self, data):
         global count
-        global data_list
         #How many tweets you want to find, could change to time based
         try:
-            if count <= 10:
+            if count <= int(self.number_of_tweets)-1:
                 json_data = json.loads(data)
                 coords = json_data["coordinates"]
                 if coords is not None:
@@ -16,13 +19,13 @@ class listener(StreamListener):
                     #lon = coords["coordinates"][0]
                     #lat = coords["coordinates"][1]
 
-                    data_list.append(json_data)
+                    self.data_list.append(json_data)
 
                     count += 1
-                    print(count)
+                print(count)
                 return True
             else:
-                exit("Enough tweets")
+                return False
         except:
             return True
 
