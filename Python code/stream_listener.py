@@ -22,7 +22,6 @@ class listener(StreamListener):
                     self.data_list.append(json_data)
 
                     count += 1
-                print(count)
                 return True
             else:
                 return False

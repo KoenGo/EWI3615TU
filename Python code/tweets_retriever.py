@@ -14,5 +14,5 @@ class tweets():
         auth.set_access_token(access_token, access_secret)
 
         twitterStream = Stream(auth, listener(number_of_tweets, data_list))
-        twitterStream.filter(locations=[-129.0506786523,24.7249990876,-69.1287372546,50.2424298384])
+        twitterStream.filter(locations=[-124.3150818348,24.3677378899,-68.5045349598,49.1534179227])
         return data_list
