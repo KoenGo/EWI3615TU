@@ -33,12 +33,11 @@ class Newspage():
         return "News page created at: " + str(self.timestamp) + "\nWith top five: " + str(self.top_five)
 
     #  Pull more headlines from the website
-
     def find_more(self):
         self.old_headlines = self.current_headlines
+
         with open(self.filename, "w") as file:
             file.write(self.source)
-            file.close()
         self.current_headlines = self.get_headlines(self.filename)
         if set(self.current_headlines) == set(self.old_headlines):
             return "No new headlines found"
@@ -49,8 +48,8 @@ class Newspage():
 
     def get_headlines(self, filename):
         newspage = open(filename, 'rt').read()
-        headlines = re.findall('(?<=<span class="cd__headline-text">)([^<]*)', newspage)
-        return headlines
+        self.headlines = re.findall('(?<=<span class="cd__headline-text">)([^<]+)', newspage)
+        return self.headlines
 
     # Method for extracting nouns
     # extract_nouns(sentence: str) -> [str]
@@ -60,11 +59,8 @@ class Newspage():
             tb_sentence = TextBlob(sentence)
         else:
             raise Exception("Input must be string")
-        result = []
-        nounlist = tb_sentence.noun_phrases
-        for i in nounlist:
-            result += i.split(" ")
-        return result
+        noun_list = tb_sentence.noun_phrases
+        return [i.split(" ") for i in noun_list]
 
     # Extract all returns a list of lists containing all nouns
     # with each sublist corresponding to one headline
@@ -93,14 +89,16 @@ class Newspage():
 
 newspage = Newspage()
 
-while True:
-    time.sleep(0.1)
-    inp = input("\nInput 'n' to pull more headlines, 's' to stop: ")
-    if inp.lower() == "s":
-        break
-    elif inp.lower() == "n":
-        print(newspage.find_more())
-    elif inp.lower() == "show":
-        print(newspage)
-    else:
-        continue
+print(newspage.most_common_nouns())
+
+# while True:
+#     time.sleep(0.1)
+#     inp = input("\nInput 'n' to pull more headlines, 's' to stop: ")
+#     if inp.lower() == "s":
+#         break
+#     elif inp.lower() == "n":
+#         print(newspage.find_more())
+#     elif inp.lower() == "show":
+#         print(newspage)
+#     else:
+#         continue
