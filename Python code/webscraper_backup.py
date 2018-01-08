@@ -15,22 +15,21 @@ import operator
 
 class NewsPage():
     def __init__(self):
-        self.url = "https://news.google.com/news/headlines"
-        self.source = requests.get(self.url).text.encode('utf-8')
+        self.url = "http://edition.cnn.com/specials/last-50-stories"
+        self.source = requests.get(self.url).text
         self.timestamp = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         self.filename = 'newspage.txt'
-        self.headlines = None
 
         # Write whole source code to txt file
-        try:
-            with open(self.filename, 'w') as file:
-                file.write(str(self.source))
-                file.close()
-        except Exception as err:
-                print("{0}".format(err))
+        with open(self.filename, 'w') as file:
+            file.write(self.source)
+            file.close()
+        self.current_headlines = self.get_headlines(self.filename)
+        self.old_headlines = None
+        self.top_five = [i for i in self.most_common_nouns(5)]
 
     def __str__(self):
-        return "News page created at: " + str(self.timestamp)
+        return "News page created at: " + str(self.timestamp) + "\nWith top five: " + str(self.top_five)
 
     #  Pull more headlines from the website
     def find_more(self):
@@ -46,21 +45,10 @@ class NewsPage():
 
     # Get headlines from the source code (which is in the text file)
 
-    def get_headlines(self, filename= 'newspage.txt'):
+    def get_headlines(self, filename="newspage.txt"):
         newspage = open(filename, 'rt').read()
-        self.headlines = re.findall('(?<= jsname="[\w]{6}" role="heading" aria-level="3" >)([^<]+)', newspage)
+        self.headlines = re.findall('(?<=<span class="cd__headline-text">)([^<]+)', newspage)
         return self.headlines
-
-    def headlines_to_file(self):
-        if self.headlines is not None:
-            with open('headlines.txt', 'w') as file:
-                for headline in self.headlines:
-                    file.write(headline + "\n")
-        else:
-            with open('headlines.txt', 'w') as file:
-                for headline in self.get_headlines():
-                    file.write(headline + "\n")
-
 
     # Method for extracting nouns
     # extract_nouns(sentence: str) -> [str]
@@ -99,8 +87,7 @@ class NewsPage():
             return sorted_nouns
 
 a = NewsPage()
-
-print()
+print(a.extract_nouns("McGowan slams 'Hollywood fakery' at Globes"))
 
 # while True:
 #     time.sleep(0.1)

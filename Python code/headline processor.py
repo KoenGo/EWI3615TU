@@ -5,8 +5,9 @@
 from webscraper import NewsPage
 
 class HeadlineProcessor():
-    def __init__(self):
-        pass
+    def __init__(self, NewsPage):
+        self.headline_list = NewsPage.current_headlines
+
 
     def __str__(self):
         pass
@@ -16,3 +17,4 @@ class HeadlineProcessor():
 
     def __next__(self):
         pass
+
