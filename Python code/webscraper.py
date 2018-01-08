@@ -12,9 +12,9 @@ import datetime
 import time
 from collections import Counter
 import operator
+import numpy
 
-
-class Newspage():
+class NewsPage():
     def __init__(self):
         self.url = "http://edition.cnn.com/specials/last-50-stories"
         self.source = requests.get(self.url).text
@@ -46,7 +46,7 @@ class Newspage():
 
     # Get headlines from the source code (which is in the text file)
 
-    def get_headlines(self, filename):
+    def get_headlines(self, filename="newspage.txt"):
         newspage = open(filename, 'rt').read()
         self.headlines = re.findall('(?<=<span class="cd__headline-text">)([^<]+)', newspage)
         return self.headlines
@@ -77,6 +77,7 @@ class Newspage():
         for noun_list in self.extract_all():
             all_nouns += noun_list
         # Remove CNN and 's from the list
+        all_nouns = [item for sublist in all_nouns for item in sublist]
         noun_dict = Counter(all_nouns)
         del noun_dict["'s"]
         del noun_dict["cnn"]
@@ -86,10 +87,8 @@ class Newspage():
         else:
             return sorted_nouns
 
-
-newspage = Newspage()
-
-print(newspage.most_common_nouns())
+a = NewsPage()
+print(a.extract_nouns())
 
 # while True:
 #     time.sleep(0.1)
