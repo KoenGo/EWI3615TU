@@ -18,8 +18,6 @@ class listener(StreamListener):
                     coords = json_data["coordinates"]
                     if coords is not None:
                         print(coords["coordinates"])
-                        #lon = coords["coordinates"][0]
-                        #lat = coords["coordinates"][1]
 
                         self.data_list.append(json_data)
 
