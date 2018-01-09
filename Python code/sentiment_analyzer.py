@@ -1,5 +1,5 @@
 class sentiment:
-    def get(self,data_list):
+    def get(self, data_list):
         from textblob import TextBlob
         total_polarity = 0
         count = 0
