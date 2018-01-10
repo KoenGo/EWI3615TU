@@ -74,15 +74,15 @@ class HeadlineGetter:
                 with open(grouped_headlines_file, 'w') as gh_file:
                     while True:
                         if re.search('View full coverage', line):
+                            split_nr += 1
                             line = next(line_iter)
                             break
                         gh_file.write(line)
                         try:
                             line = next(line_iter)
                         except StopIteration:
+                            self.stories_amount = split_nr - 1
                             return
-                split_nr += 1
-                self.stories_amount = split_nr - 1
                 if split_nr > 10:
                     raise Exception("Something might be wrong here!")
 
@@ -93,6 +93,8 @@ class HeadlineGetter:
         return headlines
 
     def get_headlines(self):
-        for file_nr in range(self.stories_amount + 1):
+        for file_nr in range(self.stories_amount):
             file_name = "webscraper_output/headlines_{}.txt".format(file_nr + 1)
             self.headlines.append(self.get_headlines_from_file(file_name))
+
+a = HeadlineGetter()

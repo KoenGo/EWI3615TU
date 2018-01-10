@@ -2,6 +2,7 @@ import re
 from textblob import TextBlob as TB
 from collections import Counter
 from headline_getter import HeadlineGetter
+import collections
 
 
 
@@ -16,14 +17,10 @@ class HeadlineProcessor:
         pass
 
     def __iter__(self):
-        if self.headlines:
-            return self
-        else:
-            raise Exception('Headlines are empty!')
-
-    def __next__(self):
-        headlines_iterator = iter(self.headlines)
-        return self.top_nouns_per_list(next(headlines_iterator))
+        top_nouns_list = []
+        for headline in self.headlines:
+            top_nouns_list.append(self.top_nouns_per_list(headline))
+        return iter(top_nouns_list)
 
     def trim_headlines(self):
         result = []
@@ -40,7 +37,15 @@ class HeadlineProcessor:
         else:
             raise Exception("Input must be string")
         noun_list = tb_sentence.noun_phrases
-        return [i.split(" ") for i in noun_list]
+        # Sub function to flatten the output
+        def flatten(l):
+            for el in l:
+                if isinstance(el, collections.Iterable) and not isinstance(el, (str, bytes)):
+                    yield from flatten(el)
+                else:
+                    yield el
+        result = [i.split(" ") for i in noun_list]
+        return flatten(result)
 
     def extract_nouns_list(self, list):
         result = []
@@ -48,14 +53,6 @@ class HeadlineProcessor:
             result += (self.extract_nouns_sentence(sentence))
         return result
 
-    def top_nouns_per_list(self, list, n = 5):
+    def top_nouns_per_list(self, list, n = 6):
         counted_nouns = Counter(self.extract_nouns_list(list)).most_common(n)
         return sorted(counted_nouns, key = lambda tuple: tuple[1], reverse=True)
-
-
-
-a = HeadlineGetter()
-b = HeadlineProcessor(a)
-print(b.headlines)
-for i in b:
-    print(i)
