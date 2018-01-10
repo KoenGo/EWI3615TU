@@ -8,39 +8,53 @@ source = req.text
 
 soup = bs(source,'html.parser')
 
-with open('raw_source.txt', 'wb') as file:
+with open('unformatted_source.txt', 'wb') as file:
     file.write(source.encode('utf-8', 'ignore'))
 
-with open('bs_source.txt', 'wb') as file:
+with open('full_source.txt', 'wb') as file:
      file.write(soup.prettify().encode('utf-8','ignore'))
-
-
-with open('bs_strings.txt', 'wb') as file:
-    for string in soup.strings:
-        file.write(string.encode('utf-8','ignore'))
-
 
 #
 # read lines, write lines to txt file until regex is found
 #
 def top_stories_to_file():
-    with open('bs_source.txt', 'r', errors='ignore') as file:
+    with open('full_source.txt', 'r', errors='ignore') as file:
         lines = file.readlines()
         line_iter = iter(lines)
-        line = lines[0]
-        with open('chopped_source.txt', 'w') as chopped_file:
+        line = next(line_iter)
+        with open('top_stories_source.txt', 'w') as chopped_file:
             while True:
                 if re.search('(\<a class="\w{6}" href="headlines/section/topic/WORLD\?ned=us" jslog="\d{5}; track: click;"\>)[^World]',line):
                     break
                 chopped_file.write(line)
                 line = next(line_iter)
 
-# def split_top_stories():
-#     with open('chopped_source.txt', 'r', errors='ignore') as file:
-#         while
 
-def get_headlines():
-    newspage = open('chopped_source.txt', 'r').read()
+def split_top_stories():
+    with open('top_stories_source.txt', 'r', errors='ignore') as file:
+        lines = file.readlines()
+        line_iter = iter(lines)
+        line = next(line_iter)
+        split_nr = 1
+        while True:
+            grouped_headlines_file = 'headlines_{}.txt'.format(split_nr)
+            with open(grouped_headlines_file, 'w') as gh_file:
+                while True:
+                    if re.search('View full coverage',line):
+                        line = next(line_iter)
+                        break
+                    gh_file.write(line)
+                    try:
+                        line = next(line_iter)
+                    except StopIteration:
+                        return
+            split_nr += 1
+            if split_nr > 10:
+                break
+
+def get_headlines(file):
+    """Automatically gets all head lines form a source file"""
+    newspage = open(file, 'r').read()
     headlines = re.findall('jsname="\w{6}" role="heading" target="_blank">([^<]+)', newspage)
     return headlines
 
@@ -49,11 +63,5 @@ def headlines_to_file(headlines):
             for headline in headlines:
                 file.write(headline + "\n")
 
-print(get_headlines())
-headlines_to_file(get_headlines())
-
-# <c-wiz jsrenderer="WluEBc" class="ROONz H7eG6b" jsshadow jsdata="deferred-i1" data-p="%.@.&quot;headlines&quot;,null,null,null,&quot;us&quot;]
-# " jscontroller="GILUZe" jsaction="click:cOuCgd;RI2Xre:Vtdxob;" data-node-index="0;0" jsmodel="hc6Ubd">
-# get turned into
-# <c-wiz class="ROONz H7eG6b" data-node-index="0;0" data-p='%.@."headlines",null,null,null,"us"]
-# ' jsaction="click:cOuCgd;RI2Xre:Vtdxob;" jscontroller="GILUZe" jsdata="deferred-i1" jsmodel="hc6Ubd" jsrenderer="WluEBc" jsshadow="">
+top_stories_to_file()
+split_top_stories()
