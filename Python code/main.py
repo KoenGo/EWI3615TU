@@ -15,7 +15,8 @@ cities_dict = us_cities().load_cities()
 data_list = tweets().get(search_text, text_or_location, number_of_tweets, data_list, cities_dict)
 
 from sentiment_analyzer import sentiment
-polarity = sentiment().get(data_list)
+(polarity, data_list) = sentiment().get(data_list)
 print("polarity =", polarity)
 
+from location_map import map
 map(data_list, text_or_location, cities_dict).print_map()
