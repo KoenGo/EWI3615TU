@@ -1,3 +1,7 @@
+import re
+import time
+import gmplot
+from US_cities import us_cities
 class map:
     def __init__(self, data_list, cities_dict):
         self.data_list = data_list
@@ -9,8 +13,6 @@ class map:
         self.cities_dict = cities_dict
 
     def map_inputs(self):
-        import re
-        import time
         remove_list = []
         for tweet in self.data_list:
             self.colors.append(tweet["color"])
@@ -36,8 +38,6 @@ class map:
 
 
     def geocode_to_lat_long(self, tweet):
-        import time
-        import gmplot
         gmmap = gmplot.GoogleMapPlotter
         tried_count = 0
         place_name = tweet["place"]["full_name"]
@@ -54,13 +54,16 @@ class map:
             else:
                 try:
                     coordinates = gmmap.geocode(place_name)
+                    us_cities().save_cities(place_name,coordinates)
                     succes = True
                 except IndexError:
                     tried_count += 1
+                except ConnectionError:
+                    self.remove_tweet = True
+                    return [0, 0]
         return coordinates
 
     def print_map(self):
-        import gmplot
 
         self.map_inputs()
 

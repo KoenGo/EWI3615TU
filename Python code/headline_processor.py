@@ -10,7 +10,7 @@ class HeadlineProcessor:
         self.HeadlineGetter = HeadlineGetter()
         self.timestamp = self.HeadlineGetter.timestamp
         self.headlines = self.trim_headlines()
-        self.stories = [story for story in self]
+        self.search_terms = [[term for term, count in story] for story in self]
 
     def __str__(self):
         return self.HeadlineGetter.__str__()

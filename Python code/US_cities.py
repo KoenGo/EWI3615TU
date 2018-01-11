@@ -1,14 +1,27 @@
+import csv
+import os
+
 class us_cities:
-    def load_cities(self, file_name='uscities.csv'):
-        import csv
-        import os
-        root = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(root, 'data', file_name)
-        with open(path , newline='') as csvfile:
+    def __init__(self):
+        self.file_name = 'uscities.csv'
+        self.root = os.path.abspath(os.path.dirname(__file__))
+        self.path = os.path.join(self.root, 'data', self.file_name)
+
+    def load_cities(self):
+        with open(self.path , newline='') as csvfile:
             csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             cities_dict = {}
             for row in csvreader:
-                if row[0] == 'city':
-                    continue
-                cities_dict[row[1] + str(", ") + row[2]] = [float(row[8]), float(row[7])]
+                cities_dict[row[0] + str(", ") + row[1]] = [float(row[3]), float(row[2])]
         return cities_dict
+
+    def save_cities(self, place, coordinates):
+        with open(self.path, 'w', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|')
+            city_state = place.split(", ")
+            csvwriter.writerow([city_state[0],city_state[1], coordinates[0], coordinates[1]])
+            print(city_state)
+
+
+
+

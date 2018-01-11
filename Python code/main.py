@@ -1,7 +1,14 @@
+from headline_processor import HeadlineProcessor
+top_news = HeadlineProcessor()
+print(top_news)
+headlines = top_news.search_terms
+print(headlines)
+
 from tweets_retriever import tweets
 data_list = []
-search_text = ""
-search_text = input("For what search term do you want the sentiment? ")
+search_text = str(headlines[0][0])+ " " + str(headlines[0][1])
+print(search_text)
+# search_text = input("For what search term do you want the sentiment? ")
 number_of_tweets = input("How many tweets do you want to use? ")
 
 from US_cities import us_cities

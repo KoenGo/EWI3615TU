@@ -11,8 +11,13 @@ class listener(StreamListener):
     def on_data(self, data):
         if self.count <= self.number_of_tweets-1:
             json_data = json.loads(data)
+
+            # check if Streamlistener returns a limit message instead of a tweet
             if "limit" in json_data:
                 return True
+
+            # determining whether a tweet has coordinates, place and users place of tweet
+            # if a attribute exists it will be saved with the tweet in data_list
             coords = json_data["coordinates"]
             place = json_data["place"]
             user_place = json_data["user"]["location"]

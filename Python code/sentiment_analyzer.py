@@ -1,6 +1,6 @@
+from textblob import TextBlob
 class sentiment:
     def get(self, data_list):
-        from textblob import TextBlob
         total_polarity = 0
         count = 0
         list_of_colors = ['#8B0000', '#FF0000', '#FF8C00', '#FFA500', '#FFFF00', '#ADFF2F', '#9ACD32', '#008000', '#006400']
