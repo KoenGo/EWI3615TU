@@ -5,16 +5,14 @@ from headline_getter import HeadlineGetter
 import collections
 
 
-
 class HeadlineProcessor:
-    def __init__(self, HeadlineGetter):
-        self.HeadlineGetter = HeadlineGetter
+    def __init__(self):
+        self.HeadlineGetter = HeadlineGetter()
         self.timestamp = self.HeadlineGetter.timestamp
         self.headlines = self.trim_headlines()
 
-
     def __str__(self):
-        pass
+        return self.HeadlineGetter.__str__()
 
     def __iter__(self):
         top_nouns_list = []
@@ -27,7 +25,7 @@ class HeadlineProcessor:
         for headline_group in self.HeadlineGetter:
             tmp_headline = []
             for headline in headline_group:
-                tmp_headline.append(re.sub('\\n','', headline).strip(' '))
+                tmp_headline.append(re.sub('\\n', '', headline).strip(' '))
             result.append(tmp_headline)
         return result
 
@@ -37,6 +35,7 @@ class HeadlineProcessor:
         else:
             raise Exception("Input must be string")
         noun_list = tb_sentence.noun_phrases
+
         # Sub function to flatten the output
         def flatten(l):
             for el in l:
@@ -44,6 +43,7 @@ class HeadlineProcessor:
                     yield from flatten(el)
                 else:
                     yield el
+
         result = [i.split(" ") for i in noun_list]
         return flatten(result)
 
@@ -53,6 +53,14 @@ class HeadlineProcessor:
             result += (self.extract_nouns_sentence(sentence))
         return result
 
-    def top_nouns_per_list(self, list, n = 6):
+    def top_nouns_per_list(self, list, n=6):
         counted_nouns = Counter(self.extract_nouns_list(list)).most_common(n)
-        return sorted(counted_nouns, key = lambda tuple: tuple[1], reverse=True)
+        noun_list = sorted(counted_nouns, key=lambda tuple: tuple[1], reverse=True)
+        noun_list_copy = noun_list[:]
+        for i, pair in enumerate(noun_list):
+            if self.find_unwanted_nouns(pair[0]):
+                noun_list_copy.remove(pair)
+        return noun_list_copy
+
+    def find_unwanted_nouns(self, string):
+        return re.search("\'s|\'ll", string)

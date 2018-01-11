@@ -4,6 +4,7 @@ import re
 import datetime
 import os
 
+
 class HeadlineGetter:
     def __init__(self):
         # Timestamp, initialize some stuff
@@ -26,7 +27,7 @@ class HeadlineGetter:
         self.get_headlines()
 
     def __str__(self):
-        return "HeadlineGetter created at {0}".format(self.timestamp)
+        return "Headlines pulled at {0}".format(self.timestamp)
 
     def __iter__(self):
         if self.headlines is not None:
@@ -83,6 +84,7 @@ class HeadlineGetter:
                         except StopIteration:
                             self.stories_amount = split_nr - 1
                             return
+                # Avoid getting stuck in infinite loop when something goes wrong
                 if split_nr > 10:
                     raise Exception("Something might be wrong here!")
 
@@ -96,5 +98,3 @@ class HeadlineGetter:
         for file_nr in range(self.stories_amount):
             file_name = "webscraper_output/headlines_{}.txt".format(file_nr + 1)
             self.headlines.append(self.get_headlines_from_file(file_name))
-
-a = HeadlineGetter()
