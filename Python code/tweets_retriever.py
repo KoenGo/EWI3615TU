@@ -1,4 +1,3 @@
-import json
 from tweepy import Stream
 from tweepy import OAuthHandler
 from stream_listener import listener

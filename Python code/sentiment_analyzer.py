@@ -14,4 +14,4 @@ class sentiment:
             number = round((polarity+1)*4)
             data_list[count]["color"] = list_of_colors[number]
             count += 1
-        return (total_polarity, data_list)
+        return total_polarity, data_list
