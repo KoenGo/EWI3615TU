@@ -16,7 +16,7 @@ class us_cities:
         return cities_dict
 
     def save_cities(self, place, coordinates):
-        with open(self.path, 'w', newline='') as csvfile:
+        with open(self.path, 'a', newline='') as csvfile:
             csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|')
             city_state = place.split(", ")
             csvwriter.writerow([city_state[0],city_state[1], coordinates[0], coordinates[1]])

@@ -29,9 +29,9 @@ class map:
                 self.long.append(tweet["coordinates"]["coordinates"][0])
                 self.lat.append(tweet["coordinates"]["coordinates"][1])
             try:
-                self.text.append(re.sub('[^a-zA-Z0-9-_*.]', ' ', re.sub(r"http\S+", ' ', tweet['full_text'])))
+                self.text.append(re.sub(r"http\S+", ' ', tweet['full_text']))
             except KeyError:
-                self.text.append(re.sub('[^a-zA-Z0-9-_*.]', ' ', re.sub(r"http\S+", ' ', tweet['text'])))
+                self.text.append(re.sub(r"http\S+", ' ', tweet['text']))
         for tweet in remove_list:
             self.data_list.remove(tweet)
 
@@ -54,7 +54,8 @@ class map:
             else:
                 try:
                     coordinates = gmmap.geocode(place_name)
-                    us_cities().save_cities(place_name,coordinates)
+                    us_cities().save_cities(place_name, coordinates)
+                    self.cities_dict = us_cities().load_cities()
                     succes = True
                 except IndexError:
                     tried_count += 1
