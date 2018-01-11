@@ -13,10 +13,6 @@ data_list = tweets().get(search_text, text_or_location, number_of_tweets, data_l
 
 print(data_list)
 from sentiment_analyzer import sentiment
-(polarity, data_list) = sentiment().get(data_list)
+polarity = sentiment().get(data_list)
 print("polarity =", polarity)
-
-from location_map import map
-map(data_list, text_or_location).print_map()
-
 
