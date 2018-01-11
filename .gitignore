@@ -102,14 +102,16 @@ ENV/
 
 .idea/
 
-Python code/webscraper_output/top_stories_source.txt
-Python code/webscraper_output/headlines_5.txt
-Python code/webscraper_output/headlines_4.txt
-Python code/webscraper_output/headlines_2.txt
-Python code/webscraper_output/headlines_1.txt
+
+Python code/newspage.txt
 Python code/testt.py
 Python code/webscraper_output/unformatted_source.txt
 Python code/webscraper_output/headlines_6.txt
-Python code/webscraper_output/full_source.txt
+Python code/webscraper_output/headlines_5.txt
 Python code/webscraper_output/headlines_3.txt
+Python code/webscraper_output/headlines_1.txt
+Python code/webscraper_output/full_source.txt
 Python code/webscraper_output/headlines_7.txt
+Python code/webscraper_output/headlines_2.txt
+Python code/webscraper_output/top_stories_source.txt
+Python code/webscraper_output/headlines_4.txt
