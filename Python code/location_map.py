@@ -1,11 +1,10 @@
 class map:
-    def __init__(self, data_list, text_or_location, cities_dict):
+    def __init__(self, data_list, cities_dict):
         self.data_list = data_list
         self.long = []
         self.lat = []
         self.colors = []
         self.text = []
-        self.text_or_location = text_or_location
         self.remove_tweet = False
         self.cities_dict = cities_dict
 
