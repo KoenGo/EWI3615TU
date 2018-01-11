@@ -1,5 +1,4 @@
 import json
-import sys
 from tweepy.streaming import StreamListener
 count = 0
 class listener(StreamListener):
@@ -10,16 +9,15 @@ class listener(StreamListener):
 
     def on_data(self, data):
         global count
-
         if self.text_or_location == "l":
             try:
                 if count <= int(self.number_of_tweets)-1:
                     json_data = json.loads(data)
+                    if "limit" in json_data:
+                        return True
                     coords = json_data["coordinates"]
                     if coords is not None:
                         print(coords["coordinates"])
-                        #lon = coords["coordinates"][0]
-                        #lat = coords["coordinates"][1]
 
                         self.data_list.append(json_data)
 
@@ -32,8 +30,13 @@ class listener(StreamListener):
         else:
             if count <= int(self.number_of_tweets)-1:
                 json_data = json.loads(data)
-                self.data_list.append(json_data)
-                count += 1
+                if "limit" in json_data:
+                    return True
+                place = json_data["place"]
+                if place is not None:
+                    self.data_list.append(json_data)
+                    count += 1
+                return True
             else:
                 return False
     def on_error(self, status):
