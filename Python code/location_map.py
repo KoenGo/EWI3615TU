@@ -33,10 +33,13 @@ class map:
                 self.lat.append(tweet["coordinates"]["coordinates"][1])
             try:
                 normal_text = re.sub(r"http\S+", ' ', tweet['full_text'])
-                self.text.append(re.sub(r"[^\w]+", ' ', normal_text))
+                double_space = re.sub(r"[^ -~]+", ' ', normal_text)
+                self.text.append(re.sub(r'[\s]{2,}', ' ', double_space))
             except KeyError:
                 normal_text = re.sub(r"http\S+", ' ', tweet['text'])
-                self.text.append(re.sub(r"[^\w]+", ' ', normal_text))
+                double_space = re.sub(r"[^ -~]+", ' ', normal_text)
+                self.text.append(re.sub(r'[\s]{2,}', ' ', double_space))
+
         for tweet in remove_list:
             self.data_list.remove(tweet)
 

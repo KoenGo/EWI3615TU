@@ -7,6 +7,7 @@ from location_map import map
 
 
 class DataCollector:
+    """"Starts collecting until stopped, returning information at interval time"""
     def __init__(self):
         self.make_dir()
         self.interval = 10  # Minutes
@@ -49,7 +50,6 @@ class DataCollector:
         return map(data_list, cities_dict, timestamp).print_map()
 
     def start_collecting(self):
-        """"Starts collecting until stopped, returning information at interval time"""
         while True:
             print("Gather tweets")
             tweets_raw = self.gather_tweets(self.interval, self.story)
