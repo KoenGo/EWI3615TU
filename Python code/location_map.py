@@ -2,8 +2,10 @@ import re
 import time
 import gmplot
 from US_cities import us_cities
+
+
 class map:
-    def __init__(self, data_list, cities_dict):
+    def __init__(self, data_list, cities_dict, timestamp):
         self.data_list = data_list
         self.long = []
         self.lat = []
@@ -11,6 +13,7 @@ class map:
         self.text = []
         self.remove_tweet = False
         self.cities_dict = cities_dict
+        self.timestamp = timestamp
 
     def map_inputs(self):
         remove_list = []
@@ -36,8 +39,6 @@ class map:
                 self.text.append(re.sub(r"[^\w]+", ' ', normal_text))
         for tweet in remove_list:
             self.data_list.remove(tweet)
-
-
 
     def geocode_to_lat_long(self, tweet):
         gmmap = gmplot.GoogleMapPlotter
@@ -76,4 +77,4 @@ class map:
 
         gmap.coloricon = "http://www.googlemapsmarkers.com/v1/%s/"
         # Write the map in an HTML file
-        gmap.draw('map.html')
+        gmap.draw('map_{}.html'.format(self.timestamp))

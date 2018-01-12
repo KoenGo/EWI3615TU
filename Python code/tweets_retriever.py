@@ -1,8 +1,8 @@
 from tweepy import Stream
 from tweepy import OAuthHandler
 from stream_listener import listener
-class tweets():
-    def get(self, search_text, time_limit_h, data_list, cities_dict):
+class tweets:
+    def get(self, search_text, time_limit_h, cities_dict, data_list=list()):
 
         # twitter developer keys
         client_key = 'U0zHy6gQlsMpQumbEgHWXb7nm'
