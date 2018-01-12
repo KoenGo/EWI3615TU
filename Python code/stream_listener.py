@@ -3,7 +3,7 @@ import time
 from tweepy.streaming import StreamListener
 class listener(StreamListener):
     def __init__(self, time_limit_h, data_list, cities_dict):
-        self.time_limit = int(time_limit_h)*3600
+        self.time_limit = float(time_limit_h)*3600
         self.data_list = data_list
         self.cities_dict = cities_dict
         # self.progress_list = [round(self.number_of_tweets*(x+1)/10) for x in range(10)]

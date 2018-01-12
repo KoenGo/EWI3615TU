@@ -6,7 +6,7 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=true_or_false"></script>
 <script type="text/javascript">
 	function initialize() {
-		var centerlatlng = new google.maps.LatLng(39.739154, -104.984703);
+		var centerlatlng = new google.maps.LatLng(-101.855166, 33.577863);
 		var myOptions = {
 			zoom: 2,
 			center: centerlatlng,
@@ -14,30 +14,6 @@
 		};
 		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-		var latlng = new google.maps.LatLng(39.739154, -104.984703);
-		var img = new google.maps.MarkerImage('http://www.googlemapsmarkers.com/v1/9ACD32/');
-		var marker = new google.maps.Marker({
-		title: "RT @christinawilkie: Trump employs more immigrant workers from Haiti at Mar-A-Lago than from anywhere else, save for Romania.
-So Haitians a…",
-		icon: img,
-		position: latlng
-		});
-		marker.setMap(map);
-
-		var latlng = new google.maps.LatLng(34.052234, -118.243685);
+		var latlng = new google.maps.LatLng(-101.855166, 33.577863);
 		var img = new google.maps.MarkerImage('http://www.googlemapsmarkers.com/v1/FFFF00/');
-		var marker = new google.maps.Marker({
-		title: "RT @AynAyahSteenkur: Trump calls:
-Mexicans—rapists
-Muslims—terrorists
-Blacks—violent
-Women—nasty
-#Haiti and African nations—shithole countr…",
-		icon: img,
-		position: latlng
-		});
-		marker.setMap(map);
-
-		var latlng = new google.maps.LatLng(37.224236, -95.708313);
-		var img = new google.maps.MarkerImage('http://www.googlemapsmarkers.com/v1/FFA500/');
 		var marker = new google.maps.Marker({

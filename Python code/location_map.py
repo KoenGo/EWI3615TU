@@ -29,9 +29,9 @@ class map:
                 self.long.append(tweet["coordinates"]["coordinates"][0])
                 self.lat.append(tweet["coordinates"]["coordinates"][1])
             try:
-                self.text.append(re.sub(r"http\S+", ' ', tweet['full_text']))
+                self.text.append(re.sub(r"http\S+", ' ', tweet['full_text']).encode(errors='ignore'))
             except KeyError:
-                self.text.append(re.sub(r"http\S+", ' ', tweet['text']))
+                self.text.append(re.sub(r"http\S+", ' ', tweet['text']).encode(errors='ignore'))
         for tweet in remove_list:
             self.data_list.remove(tweet)
 
@@ -70,7 +70,7 @@ class map:
 
         gmap = gmplot.GoogleMapPlotter(self.lat[0], self.long[0], 2)
         for x in range(len(self.data_list)):
-            gmap.marker(self.lat[x], self.long[x], color=self.colors[x], title=self.text[x])
+            gmap.marker(self.lat[x], self.long[x], color=self.colors[x], title=self.text[x].decode(errors='ignore'))
 
         gmap.coloricon = "http://www.googlemapsmarkers.com/v1/%s/"
         # Write the map in an HTML file

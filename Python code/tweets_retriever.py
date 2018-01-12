@@ -2,7 +2,7 @@ from tweepy import Stream
 from tweepy import OAuthHandler
 from stream_listener import listener
 class tweets():
-    def get(self, search_text, time_limit, data_list, cities_dict):
+    def get(self, search_text, time_limit_h, data_list, cities_dict):
 
         # twitter developer keys
         client_key = 'U0zHy6gQlsMpQumbEgHWXb7nm'
