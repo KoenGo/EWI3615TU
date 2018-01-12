@@ -23,7 +23,7 @@ class sentiment:
 
             # Pick marker color
             number = round((polarity + 1) * 4)
-            if neutral_tweets == "Y":
+            if neutral_tweets == "y":
                 if number == 4:
                     remove_list.append(tweet)
             data_list[count]["color"] = list_of_colors[number]

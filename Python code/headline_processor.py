@@ -68,8 +68,7 @@ class HeadlineProcessor:
         counted_nouns = Counter(self.extract_nouns_list(list)).most_common(n)
         noun_list = sorted(counted_nouns, key=lambda tuple: tuple[1], reverse=True)
         noun_list_copy = noun_list[:]
-        for i, pair in enumerate(noun_list):
-            if pair[0] == ("s" or "ll"):
+        for pair in noun_list:
+            if pair[0] == ("'s" or "'ll"):
                 noun_list_copy.remove(pair)
         return noun_list_copy
-

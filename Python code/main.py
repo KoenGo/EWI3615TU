@@ -5,8 +5,8 @@ while datacollector.interval == 0 or datacollector.number_of_intervals == 0 or d
     try:
         datacollector.interval = float(input("Set interval in minutes: "))
         datacollector.number_of_intervals = int(input("Set number of intervals: "))
-        datacollector.neutral_tweets = input("Discard neutral tweets? (Y/N): ")
-        if datacollector.neutral_tweets != ("Y" or "N"):
+        datacollector.neutral_tweets = input("Discard neutral tweets? (Y/N): ").lower()
+        if datacollector.neutral_tweets != ("y" or "n"):
             datacollector.neutral_tweets = "w"
             raise ValueError
     except ValueError:

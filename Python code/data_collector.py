@@ -16,6 +16,7 @@ class DataCollector:
         self.story = 0
         self.cities_dict = us_cities().load_cities()
         self.neutral_tweets = "w"
+        self.search_text = None
 
     def make_dir(self):
         current_directory = os.getcwd()
@@ -33,16 +34,16 @@ class DataCollector:
         top_news = HeadlineProcessor()
         headlines = top_news.search_terms
         self.timestamp = top_news.timestamp
-        search_text = str(headlines[story][0]) + " " + str(headlines[story][1])
-
+        self.search_text = str(headlines[story][0]) + " " + str(headlines[story][1])
+        print("Current search:\"{0}\"".format(self.search_text))
         with open('datacollector_output/headlines.txt', 'a') as headline_file:
             headline_file.write("Headlines at " + self.timestamp + "\n")
             headline_file.write(str(top_news.headlines) + "\n")
         with open('datacollector_output/search_terms.txt', 'a') as term_file:
-            term_file.write("Searchterms at " + self.timestamp + "\n")
+            term_file.write("Search terms at " + self.timestamp + "\n")
             term_file.write(str(headlines) + "\n")
 
-        return tweets().get(search_text, interval, self.cities_dict)
+        return tweets().get(self.search_text, interval, self.cities_dict)
 
     def get_sentiment(self, input_tweet_list, neutral_tweets):
         (polarity, output_tweet_list) = sentiment().get(input_tweet_list, neutral_tweets)
@@ -54,13 +55,20 @@ class DataCollector:
     def start_collecting(self):
         interval = 0
         while interval < self.number_of_intervals:
-            print("Gathering tweets...")
+
+            # Pulling headlines, extracting tweets
+            print("Gathering tweets...({0}/{1})".format(interval+1, self.number_of_intervals))
             tweets_raw = self.gather_tweets(self.interval, self.story)
-            print("Calculating sentiment...")
+
+            # Calculating sentiment on tweets
+            print("Calculating sentiment...({0}/{1})".format(interval+1, self.number_of_intervals))
             tweets_sentiment = self.get_sentiment(tweets_raw, self.neutral_tweets)
             self.info_to_file(tweets_raw)
-            print("Generating map...")
-            map_timestamp = self.timestamp.replace(":", "-")
-            self.draw_map(tweets_sentiment, self.cities_dict, map_timestamp)
+
+            # Generate map
+            print("Generating map...({0}/{1})".format(interval+1, self.number_of_intervals))
+            map_filename_extension = "{0}_".format(self.search_text.replace(" ","_")) + str(self.timestamp.replace(":", "-"))
+            self.draw_map(tweets_sentiment, self.cities_dict, map_filename_extension)
+            print("Interval ({0}/{1}) completed \n \n".format(interval+1, self.number_of_intervals))
             interval += 1
         print("Done!")
