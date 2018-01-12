@@ -15,7 +15,7 @@ class DataCollector:
         self.timestamp = None
         self.story = 0
         self.cities_dict = us_cities().load_cities()
-        self.neutral_tweets = "w"
+        self.neutral_tweets = "w" # 'y' for yes
         self.search_text = None
 
     def make_dir(self):
@@ -26,7 +26,7 @@ class DataCollector:
 
     def info_to_file(self, tweet_list):
         with open('datacollector_output/tweet_polarity.txt', 'a') as polarity_file:
-            polarity_file.write("Polarities at: {0}\n".format(self.timestamp))
+            polarity_file.write("Polarities at: {0} for search terms: \"{1}\"\n".format(self.timestamp, self.search_text))
             for tweet in tweet_list:
                 polarity_file.write(str(tweet['polarity']) + "\n")
 
