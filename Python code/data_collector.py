@@ -26,7 +26,7 @@ class DataCollector:
 
     def info_to_file(self, tweet_list):
         with open('datacollector_output/tweet_polarity.txt', 'a') as polarity_file:
-            polarity_file.write(self.timestamp)
+            polarity_file.write("Polarities at: {0}\n".format(self.timestamp))
             for tweet in tweet_list:
                 polarity_file.write(str(tweet['polarity']) + "\n")
 
@@ -69,6 +69,6 @@ class DataCollector:
             print("Generating map...({0}/{1})".format(interval+1, self.number_of_intervals))
             map_filename_extension = "{0}_".format(self.search_text.replace(" ","_")) + str(self.timestamp.replace(":", "-"))
             self.draw_map(tweets_sentiment, self.cities_dict, map_filename_extension)
-            print("Interval ({0}/{1}) completed \n \n".format(interval+1, self.number_of_intervals))
+            print("Interval ({0}/{1}) completed \n".format(interval+1, self.number_of_intervals))
             interval += 1
         print("Done!")

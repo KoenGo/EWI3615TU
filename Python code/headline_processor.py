@@ -67,8 +67,10 @@ class HeadlineProcessor:
     def top_nouns_per_list(self, list, n=10):
         counted_nouns = Counter(self.extract_nouns_list(list)).most_common(n)
         noun_list = sorted(counted_nouns, key=lambda tuple: tuple[1], reverse=True)
+
+        # Remove some exceptions which are improperly handled by textblob from the noun list
         noun_list_copy = noun_list[:]
         for pair in noun_list:
-            if pair[0] == ("'s" or "'ll"):
+            if pair[0] == ("'s" or "'ll" or "'ve"):
                 noun_list_copy.remove(pair)
         return noun_list_copy
