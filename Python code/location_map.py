@@ -70,7 +70,7 @@ class map:
         print(len(self.data_list))
         self.map_inputs()
 
-        gmap = gmplot.GoogleMapPlotter(self.lat[0], self.long[0], 2)
+        gmap = gmplot.GoogleMapPlotter(self.lat[0], self.long[0], 3)
         for x in range(len(self.data_list)):
             gmap.marker(self.lat[x], self.long[x], color=self.colors[x], title=self.text[x])
 

@@ -15,6 +15,7 @@ class tweets():
         auth.set_access_token(access_token, access_secret)
 
         # starting the Streamlistener with the given search text for number_of_tweets
+        print("0% of time elapsed")
         twitterStream = Stream(auth, listener(time_limit_h, data_list, cities_dict))
         twitterStream.filter(track=[search_text])
         return data_list

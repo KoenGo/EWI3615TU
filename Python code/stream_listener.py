@@ -6,7 +6,7 @@ class listener(StreamListener):
         self.time_limit = float(time_limit_h)*3600
         self.data_list = data_list
         self.cities_dict = cities_dict
-        self.progress_list = [round(self.time_limit*(x)/10) for x in range(10)]
+        self.progress_list = [self.time_limit*(x)/10 for x in range(1, 11)]
         self.start_time = time.time()
         self.current_time = 0
 
