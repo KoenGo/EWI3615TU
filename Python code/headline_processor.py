@@ -32,7 +32,7 @@ class HeadlineProcessor:
 
     def extract_nouns_sentence(self, sentence):
         if isinstance(sentence, str):
-            tb_sentence = TB(sentence)
+            tb_sentence = TB(self.sentence_strip_qoutes(sentence))
         else:
             raise Exception("Input must be string")
         noun_list = tb_sentence.noun_phrases
@@ -48,6 +48,16 @@ class HeadlineProcessor:
         result = [i.split(" ") for i in noun_list]
         return flatten(result)
 
+    def sentence_strip_qoutes(self, sentence):
+        word_list = sentence.split(" ")
+        new_list = []
+        for word in word_list:
+            new_list.append(word.strip("'").strip('"'))
+        new_sentence = ''
+        for word in new_list:
+            new_sentence += ' ' + word
+        return new_sentence
+
     def extract_nouns_list(self, list):
         result = []
         for sentence in list:
@@ -59,9 +69,6 @@ class HeadlineProcessor:
         noun_list = sorted(counted_nouns, key=lambda tuple: tuple[1], reverse=True)
         noun_list_copy = noun_list[:]
         for i, pair in enumerate(noun_list):
-            if self.find_unwanted_nouns(pair[0]):
+            if pair[0] == ("s" or "ll"):
                 noun_list_copy.remove(pair)
         return noun_list_copy
-
-    def find_unwanted_nouns(self, string):
-        return re.search("\'s|\'ll", string)
