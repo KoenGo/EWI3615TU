@@ -65,7 +65,7 @@ class map:
         return coordinates
 
     def print_map(self):
-
+        print(len(self.data_list))
         self.map_inputs()
 
         gmap = gmplot.GoogleMapPlotter(self.lat[0], self.long[0], 2)
