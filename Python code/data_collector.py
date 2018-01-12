@@ -15,6 +15,7 @@ class DataCollector:
         self.timestamp = None
         self.story = 0
         self.cities_dict = us_cities().load_cities()
+        self.neutral_tweets = "w"
 
     def make_dir(self):
         current_directory = os.getcwd()
@@ -43,8 +44,8 @@ class DataCollector:
 
         return tweets().get(search_text, interval, self.cities_dict)
 
-    def get_sentiment(self, input_tweet_list):
-        (polarity, output_tweet_list) = sentiment().get(input_tweet_list)
+    def get_sentiment(self, input_tweet_list, neutral_tweets):
+        (polarity, output_tweet_list) = sentiment().get(input_tweet_list, neutral_tweets)
         return output_tweet_list
 
     def draw_map(self, data_list, cities_dict, timestamp):
@@ -56,7 +57,7 @@ class DataCollector:
             print("Gathering tweets...")
             tweets_raw = self.gather_tweets(self.interval, self.story)
             print("Calculating sentiment...")
-            tweets_sentiment = self.get_sentiment(tweets_raw)
+            tweets_sentiment = self.get_sentiment(tweets_raw, self.neutral_tweets)
             self.info_to_file(tweets_raw)
             print("Generating map...")
             map_timestamp = self.timestamp.replace(":", "-")
