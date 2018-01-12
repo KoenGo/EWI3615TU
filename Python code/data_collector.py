@@ -41,9 +41,9 @@ class DataCollector:
 
         return tweets().get(search_text, interval, self.cities_dict)
 
-    def get_sentiment(self, tweet_list):
-        (polarity, data_list) = sentiment().get(tweet_list)
-        return data_list
+    def get_sentiment(self, input_tweet_list):
+        (polarity, output_tweet_list) = sentiment().get(input_tweet_list)
+        return output_tweet_list
 
     def draw_map(self, data_list, cities_dict, timestamp):
         return map(data_list, cities_dict, timestamp).print_map()
@@ -53,9 +53,9 @@ class DataCollector:
         while True:
             print("Gather tweets")
             tweets_raw = self.gather_tweets(self.interval, self.story)
-            self.info_to_file(tweets_raw)
             print("Get sentiment")
             tweets_sentiment = self.get_sentiment(tweets_raw)
+            self.info_to_file(tweets_raw)
             print("Draw map")
             map_timestamp = self.timestamp.replace(":", "-")
             self.draw_map(tweets_sentiment, self.cities_dict, map_timestamp)

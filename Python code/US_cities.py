@@ -20,7 +20,6 @@ class us_cities:
             csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|')
             city_state = place.split(", ")
             csvwriter.writerow([city_state[0],city_state[1], coordinates[0], coordinates[1]])
-            print(city_state)
 
 
 

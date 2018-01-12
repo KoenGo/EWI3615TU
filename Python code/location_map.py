@@ -77,4 +77,4 @@ class map:
 
         gmap.coloricon = "http://www.googlemapsmarkers.com/v1/%s/"
         # Write the map in an HTML file
-        gmap.draw('map_{}.html'.format(self.timestamp))
+        gmap.draw('datacollector_output/map_{}.html'.format(self.timestamp))

@@ -122,3 +122,4 @@ Python code/webscraper_output/headlines_4.txt
 Python code/datacollector_output/headlines.txt
 Python code/datacollector_output/tweet_polarity.txt
 Python code/datacollector_output/search_terms.txt
+*.html

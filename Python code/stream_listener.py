@@ -2,8 +2,8 @@ import json
 import time
 from tweepy.streaming import StreamListener
 class listener(StreamListener):
-    def __init__(self, time_limit_h, data_list, cities_dict):
-        self.time_limit = float(time_limit_h)*60
+    def __init__(self, time_limit_min, data_list, cities_dict):
+        self.time_limit = float(time_limit_min) * 60
         self.data_list = data_list
         self.cities_dict = cities_dict
         self.progress_list = [self.time_limit*(x)/10 for x in range(1, 11)]
