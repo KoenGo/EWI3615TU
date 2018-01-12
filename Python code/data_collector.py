@@ -10,7 +10,8 @@ class DataCollector:
     """"Starts collecting until stopped, returning information at interval time"""
     def __init__(self):
         self.make_dir()
-        self.interval = 10  # Minutes
+        self.interval = 0  # Minutes
+        self.number_of_intervals = 0
         self.timestamp = None
         self.story = 0
         self.cities_dict = us_cities().load_cities()
@@ -50,17 +51,15 @@ class DataCollector:
         return map(data_list, cities_dict, timestamp).print_map()
 
     def start_collecting(self):
-        while True:
-            print("Gather tweets")
+        interval = 0
+        while interval < self.number_of_intervals:
+            print("Gathering tweets...")
             tweets_raw = self.gather_tweets(self.interval, self.story)
-            print("Get sentiment")
+            print("Calculating sentiment...")
             tweets_sentiment = self.get_sentiment(tweets_raw)
             self.info_to_file(tweets_raw)
-            print("Draw map")
+            print("Generating map...")
             map_timestamp = self.timestamp.replace(":", "-")
             self.draw_map(tweets_sentiment, self.cities_dict, map_timestamp)
-
-
-datacollector = DataCollector()
-datacollector.interval = 1
-datacollector.start_collecting()
+            interval += 1
+        print("Done!")

@@ -33,11 +33,11 @@ class map:
                 self.lat.append(tweet["coordinates"]["coordinates"][1])
             try:
                 normal_text = re.sub(r"http\S+", ' ', tweet['full_text'])
-                double_space = re.sub(r"[^ -~]+", ' ', normal_text)
+                double_space = re.sub(r"[^ !#-~]+", ' ', normal_text)
                 self.text.append(re.sub(r'[\s]{2,}', ' ', double_space))
             except KeyError:
                 normal_text = re.sub(r"http\S+", ' ', tweet['text'])
-                double_space = re.sub(r"[^ -~]+", ' ', normal_text)
+                double_space = re.sub(r"[^ !#-~]+", ' ', normal_text)
                 self.text.append(re.sub(r'[\s]{2,}', ' ', double_space))
 
         for tweet in remove_list:
@@ -71,7 +71,6 @@ class map:
         return coordinates
 
     def print_map(self):
-        print(len(self.data_list))
         self.map_inputs()
 
         gmap = gmplot.GoogleMapPlotter(self.lat[0], self.long[0], 3)
