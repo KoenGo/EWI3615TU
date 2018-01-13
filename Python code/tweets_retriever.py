@@ -5,10 +5,10 @@ class tweets:
     def get(self, search_text, time_limit_h, cities_dict, data_list=list()):
 
         # twitter developer keys
-        client_key = 'U0zHy6gQlsMpQumbEgHWXb7nm'
-        client_secret = 'CbsDAod2sb31pLqVzBctFdoNMsTQPUZTm1ZInaXm62gmDP7J7I'
-        access_token = '932924142906761216-25dcDBqKSnXX2sDJKmF7MYGbuQ2EgXQ'
-        access_secret = 'ZcRkzfxTG05pHlQhmEywM45z7Vh8u1ymCopKU5OMRBRCw'
+        client_key = '6s9eBNhnhmE97lSpmUo77q1MR'
+        client_secret = '6bkoUN5CMJOWvvUsCz84YOkZdmk4YA7n3gKdFlfaKQkvSwEQOb'
+        access_token = '952207340060758016-fUwFBDSOsAwzpMNrk2VRmDikvOXYwfY'
+        access_secret = 'RKKY83ZEXUW1kUB5NN3KfONmJBqFy2VYX0l7jBpIlAX6W'
 
         # authentication with developer keys
         auth = OAuthHandler(client_key, client_secret)

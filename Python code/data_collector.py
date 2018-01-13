@@ -16,8 +16,9 @@ class DataCollector:
         self.timestamp = None
         self.story = 0
         self.cities_dict = us_cities().load_cities()
-        self.neutral_tweets = "w" # 'y' for yes
+        self.remove_neutral_tweets = 'n' # 'y' for yes
         self.search_text = None
+        self.write_whole_tweet = 'disabled'
 
     def make_dir(self):
         current_directory = os.getcwd()
@@ -26,10 +27,24 @@ class DataCollector:
             os.makedirs(final_directory)
 
     def info_to_file(self, tweet_list):
-        with open('datacollector_output/tweet_polarity.txt', 'a') as polarity_file:
-            polarity_file.write("Polarities at: {0} for search terms: \"{1}\"\n".format(self.timestamp, self.search_text))
-            for tweet in tweet_list:
-                polarity_file.write(str(tweet['polarity']) + "\n")
+        if self.write_whole_tweet.lower() == 'enabled':
+            with open('datacollector_output/whole_tweet.txt', 'a', encoding='utf-8', errors='ignore') as whole_tweet_file:
+                whole_tweet_file.write("Tweets with polarities at: {0}\n".format(self.timestamp))
+                for tweet in tweet_list:
+                    try:
+                        whole_tweet_file.write("Tweet: {0} Polarity: {1}\n".format(tweet['full_text'], tweet['polarity']))
+                    except KeyError:
+                        whole_tweet_file.write("Tweet: {0} Polarity: {1}\n".format(tweet['text'], tweet['polarity']))
+        elif self.write_whole_tweet.lower() == 'disabled':
+            with open('datacollector_output/tweet_polarity.txt', 'a') as polarity_file:
+                polarity_file.write(
+                    "Polarities at: {0} for search terms: \"{1}\"\n".format(self.timestamp, self.search_text))
+                for tweet in tweet_list:
+                    polarity_file.write(str(tweet['polarity']) + "\n")
+        else:
+            raise Exception("Invalid parameter provided!")
+
+
 
     def gather_tweets(self, interval, story=0):
         top_news = HeadlineProcessor()
@@ -63,8 +78,8 @@ class DataCollector:
 
             # Calculating sentiment on tweets
             print("Calculating sentiment...({0}/{1})".format(interval+1, self.number_of_intervals))
-            tweets_sentiment = self.get_sentiment(tweets_raw, self.neutral_tweets)
-            self.info_to_file(tweets_raw)
+            tweets_sentiment = self.get_sentiment(tweets_raw, self.remove_neutral_tweets)
+            self.info_to_file(tweets_sentiment)
 
             # Generate map
             print("Generating map...({0}/{1})".format(interval+1, self.number_of_intervals))
