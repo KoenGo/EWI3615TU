@@ -90,7 +90,7 @@ class HeadlineGetter:
 
     def get_headlines_from_file(self, file):
         """Automatically gets all head lines form a source file"""
-        with open(file, 'r', errors='ignore') as file:
+        with open(file, 'r', encoding='utf-8', errors='ignore') as file:
             headlines = re.findall('jsname="\w{6}" role="heading" target="_blank">([^<]+)', file.read())
         return headlines
 

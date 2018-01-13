@@ -1,5 +1,11 @@
+import re
+import time
+import gmplot
+from US_cities import us_cities
+
+
 class map:
-    def __init__(self, data_list, cities_dict):
+    def __init__(self, data_list, cities_dict, timestamp):
         self.data_list = data_list
         self.long = []
         self.lat = []
@@ -7,10 +13,9 @@ class map:
         self.text = []
         self.remove_tweet = False
         self.cities_dict = cities_dict
+        self.timestamp = timestamp
 
     def map_inputs(self):
-        import re
-        import time
         remove_list = []
         for tweet in self.data_list:
             self.colors.append(tweet["color"])
@@ -27,17 +32,18 @@ class map:
                 self.long.append(tweet["coordinates"]["coordinates"][0])
                 self.lat.append(tweet["coordinates"]["coordinates"][1])
             try:
-                self.text.append(re.sub('[^a-zA-Z0-9-_*.]', ' ', re.sub(r"http\S+", ' ', tweet['full_text'])))
+                normal_text = re.sub(r"http\S+", ' ', tweet['full_text'])
+                double_space = re.sub(r"[^ !#-~]+", ' ', normal_text)
+                self.text.append(re.sub(r'[\s]{2,}', ' ', double_space))
             except KeyError:
-                self.text.append(re.sub('[^a-zA-Z0-9-_*.]', ' ', re.sub(r"http\S+", ' ', tweet['text'])))
+                normal_text = re.sub(r"http\S+", ' ', tweet['text'])
+                double_space = re.sub(r"[^ !#-~]+", ' ', normal_text)
+                self.text.append(re.sub(r'[\s]{2,}', ' ', double_space))
+
         for tweet in remove_list:
             self.data_list.remove(tweet)
 
-
-
     def geocode_to_lat_long(self, tweet):
-        import time
-        import gmplot
         gmmap = gmplot.GoogleMapPlotter
         tried_count = 0
         place_name = tweet["place"]["full_name"]
@@ -54,20 +60,23 @@ class map:
             else:
                 try:
                     coordinates = gmmap.geocode(place_name)
+                    us_cities().save_cities(place_name, coordinates)
+                    self.cities_dict = us_cities().load_cities()
                     succes = True
                 except IndexError:
                     tried_count += 1
+                except ConnectionError:
+                    self.remove_tweet = True
+                    return [0, 0]
         return coordinates
 
     def print_map(self):
-        import gmplot
-
         self.map_inputs()
 
-        gmap = gmplot.GoogleMapPlotter(self.lat[0], self.long[0], 2)
+        gmap = gmplot.GoogleMapPlotter(self.lat[0], self.long[0], 3)
         for x in range(len(self.data_list)):
             gmap.marker(self.lat[x], self.long[x], color=self.colors[x], title=self.text[x])
 
         gmap.coloricon = "http://www.googlemapsmarkers.com/v1/%s/"
         # Write the map in an HTML file
-        gmap.draw('map.html')
+        gmap.draw('datacollector_output/map_{}.html'.format(self.timestamp))

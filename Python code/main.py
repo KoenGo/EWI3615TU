@@ -1,17 +1,15 @@
-from tweets_retriever import tweets
-data_list = []
-search_text = ""
-search_text = input("For what search term do you want the sentiment? ")
-number_of_tweets = input("How many tweets do you want to use? ")
+from data_collector import DataCollector
+datacollector = DataCollector()
 
-from US_cities import us_cities
-cities_dict = us_cities().load_cities()
+while datacollector.interval == 0 or datacollector.number_of_intervals == 0 or datacollector.neutral_tweets == "w":
+    try:
+        datacollector.interval = float(input("Set interval in minutes: "))
+        datacollector.number_of_intervals = int(input("Set number of intervals: "))
+        datacollector.neutral_tweets = input("Discard neutral tweets? (Y/N): ").lower()
+        if datacollector.neutral_tweets != ("y" or "n"):
+            datacollector.neutral_tweets = "w"
+            raise ValueError
+    except ValueError:
+        print("One of the inputs is not correct, try again")
 
-data_list = tweets().get(search_text, number_of_tweets, data_list, cities_dict)
-
-from sentiment_analyzer import sentiment
-(polarity, data_list) = sentiment().get(data_list)
-print("polarity =", polarity)
-
-from location_map import map
-map(data_list, cities_dict).print_map()
+datacollector.start_collecting()
