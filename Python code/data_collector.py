@@ -98,7 +98,8 @@ class DataCollector:
             headline_processor = HeadlineProcessor()
             timestamp = headline_processor.timestamp
             with open('datacollector_output/all_nouns.txt', 'a') as noun_file:
-                noun_file.write("Nouns retrieved at: " + timestamp + "\n")
+                noun_file.write("Nouns and headlines retrieved at: " + timestamp + "\n")
+                noun_file.write("Headlines: {0}\n".format(headline_processor.headlines))
                 for count, nouns in enumerate(headline_processor):
                     noun_file.write("Story {0}: {1}\n".format(count + 1, nouns))
 
