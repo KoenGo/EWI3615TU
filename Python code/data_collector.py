@@ -1,4 +1,5 @@
 import os
+import time
 from headline_processor import HeadlineProcessor
 from tweets_retriever import tweets
 from US_cities import us_cities
@@ -32,16 +33,16 @@ class DataCollector:
 
     def gather_tweets(self, interval, story=0):
         top_news = HeadlineProcessor()
-        headlines = top_news.search_terms
+        self.headline_nouns = top_news.search_terms
         self.timestamp = top_news.timestamp
-        self.search_text = str(headlines[story][0]) + " " + str(headlines[story][1])
+        self.search_text = str(self.headline_nouns[story][0]) + " " + str(self.headline_nouns[story][1])
         print("Current search:\"{0}\"".format(self.search_text))
         with open('datacollector_output/headlines.txt', 'a') as headline_file:
             headline_file.write("Headlines at " + self.timestamp + "\n")
             headline_file.write(str(top_news.headlines) + "\n")
         with open('datacollector_output/search_terms.txt', 'a') as term_file:
             term_file.write("Search terms at " + self.timestamp + "\n")
-            term_file.write(str(headlines) + "\n")
+            term_file.write(str(self.headline_nouns) + "\n")
 
         return tweets().get(self.search_text, interval, self.cities_dict)
 
@@ -72,3 +73,24 @@ class DataCollector:
             print("Interval ({0}/{1}) completed \n".format(interval+1, self.number_of_intervals))
             interval += 1
         print("Done!")
+
+    def start_collecting_nouns(self):
+        interval = 0
+        runtime = self.interval
+        while interval < self.number_of_intervals:
+            print("Gathering nouns...({0}/{1})".format(interval + 1, self.number_of_intervals))
+            start_time = time.time()
+            headline_processor = HeadlineProcessor()
+            timestamp = headline_processor.timestamp
+            with open('datacollector_output/all_nouns.txt', 'a') as noun_file:
+                noun_file.write("Nouns retrieved at: " + timestamp + "\n")
+                for count, nouns in enumerate(headline_processor):
+                    noun_file.write("Story {0}: {1}\n".format(count + 1, nouns))
+
+            # Time the loop should rest after retrieving headlines. Runtime is in minutes
+            sleep_time = 60*runtime-(time.time()-start_time)
+            if sleep_time > 0:
+                time.sleep(sleep_time)
+            else:
+                raise Exception("Interval time is too short!")
+            interval += 1

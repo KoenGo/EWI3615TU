@@ -123,3 +123,4 @@ Python code/datacollector_output/headlines.txt
 Python code/datacollector_output/tweet_polarity.txt
 Python code/datacollector_output/search_terms.txt
 *.html
+Python code/datacollector_output/all_nouns.txt
