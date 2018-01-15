@@ -19,8 +19,6 @@ def gather_polarities():
                 polarity_list[index_count].append(float(re.search("Polarity: ([- \d\.]+)", line).group(1)))
 
 
-# hawaii missile
-# Search terms at 14-01-2018 05:16:40
 polarity_list = gather_polarities()
 x = []
 for list in polarity_list:
