@@ -36,7 +36,7 @@ class listener(StreamListener):
                     print(str(int(self.progress_list[0]/self.time_limit*100)) + "% of time elapsed")
                     del self.progress_list[0]
                     return True
-            elif json_data["user"]["location"] is not None:
+            elif user_place is not None:
                 if user_place in self.cities_dict.keys():
                     json_data["coordinates"] = {}
                     json_data["coordinates"]["coordinates"] = self.cities_dict[user_place]

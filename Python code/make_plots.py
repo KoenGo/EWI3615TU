@@ -64,3 +64,29 @@ plt.ylabel('Percentage')
 plt.grid(zorder=0)
 plt.savefig('graphs_nouns.eps', format='eps', dpi=800)
 plt.show()
+
+plt.figure(figsize=(7,3))
+x = ['Coordinates','Coordinates and place','Coordinates, place and user place']
+y = [2, 94, 7370]
+plt.bar(x, y, zorder=2, color='blue')
+for i in range(3):
+    plt.text(i-0.2, y[i]+20, str(y[i]) + " tweets")
+plt.title('Average cummulative percentage vs. noun rank')
+plt.xlabel('Noun rank (most occurring)')
+plt.ylabel('Percentage')
+plt.savefig('graphs_nouns.eps', format='eps', dpi=800)
+plt.show()
+
+labels = 'Tweet geolocation', 'Tweet place', 'User place'
+tweets = [5, 63, 4541]
+explode = (0.4, 0.1, 0.1)
+colors = ['red', 'yellow', 'blue']
+
+plt.figure()
+plt.title('Percentages of the tweet attributes where location is retrieved from')
+plt.pie(tweets, explode=explode, autopct='%1.2f%%',
+        shadow=False, startangle=90, pctdistance=1.1, labeldistance=1.3, colors= colors)
+plt.legend(labels)
+plt.axis('equal')
+plt.savefig('pie_retriever.eps', format='eps', dpi=800)
+plt.show()
